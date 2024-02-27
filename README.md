@@ -14,8 +14,7 @@ Este aplicativo foi projetado para facilitar a administração da biblioteca. El
 
 Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-- React.js 📘
-- Redux 📕
+- Flutter 📘
 - Material-UI 📙
 
 ## 🚀 Como executar
