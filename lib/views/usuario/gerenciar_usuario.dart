@@ -1,58 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/atualizar_livro.dart';
-import 'package:flutter_application_1/views/deletar_livro.dart';
-import 'package:flutter_application_1/views/listar_livro.dart';
-import 'package:flutter_application_1/views/criar_livro.dart';
+import 'package:flutter_application_1/views/usuario/atualizar_usuario.dart';
+import 'package:flutter_application_1/views/usuario/criar_usuario.dart';
+import 'package:flutter_application_1/views/usuario/deletar_usuario.dart';
+import 'package:flutter_application_1/views/usuario/listar_usuarios.dart';
 
-class GerenciarLivros extends StatelessWidget {
+class GerenciarUsuario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gerenciar Livros'),
+        title: Text('Gerenciar Usuário'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              child: Text('Criar Livro'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CriarLivro()),
+                  MaterialPageRoute(builder: (context) => CriarUsuario()),
                 );
               },
+              child: Text('Criar Usuário'),
             ),
-            SizedBox(height: 16),
             ElevatedButton(
-              child: Text('Consultar todos os livros'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ListaLivros()),
+                  MaterialPageRoute(builder: (context) => DeletarUsuario()),
                 );
               },
+              child: Text('Deletar Usuário'),
             ),
-            SizedBox(height: 16),
             ElevatedButton(
-              child: Text('Atualizar Livro'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ListaLivrosPut()),
+                  MaterialPageRoute(builder: (context) => AtualizarUsuario()),
                 );
               },
+              child: Text('Atualizar Usuário'),
             ),
-            SizedBox(height: 16),
             ElevatedButton(
-              child: Text('Deletar Livro'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ListaLivrosDelete()),
+                  MaterialPageRoute(builder: (context) => ListarUsuarios()),
                 );
               },
+              child: Text('Listar Usuários'),
             ),
           ],
         ),

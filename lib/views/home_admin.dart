@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/gerenciar_livros.dart';
+import 'package:flutter_application_1/views/livros/gerenciar_livros.dart';
+import 'package:flutter_application_1/views/usuario/gerenciar_usuario.dart';
 
 class HomeAdmin extends StatelessWidget {
   @override
@@ -40,7 +41,10 @@ class HomeAdmin extends StatelessWidget {
             ElevatedButton(
               child: Text('Gerenciar Usuários'),
               onPressed: () {
-                // Adicione sua lógica de gerenciamento de usuários aqui
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GerenciarUsuario()),
+                ); // Adicione sua lógica de gerenciamento de usuários aqui
               },
             ),
           ],

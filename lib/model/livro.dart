@@ -30,4 +30,17 @@ class Livro {
       disponibilidade: json['disponibilidade'] as bool,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'titulo': titulo,
+      'autor': autor,
+      'genero': genero,
+      'sinopse': sinopse,
+      'isbn': isbn,
+      'imagem_capa': imagem_capa,
+      'disponibilidade': disponibilidade,
+    };
+  }
 }
