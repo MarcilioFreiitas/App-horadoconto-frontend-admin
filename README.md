@@ -24,6 +24,6 @@ Para rodar este projeto na sua máquina, siga as instruções abaixo:
 1. Clone este repositório para a sua máquina.
 2. Navegue até a pasta do projeto e execute `npm install` para instalar todas as dependências.
 3. Execute `npm start` para iniciar o servidor de desenvolvimento.
-4. Abra o navegador e acesse `http://localhost:3000`.
+4. Abra o navegador e acesse `http://localhost:8080`.
 
 Esperamos que você goste do nosso projeto! Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue. 👍
