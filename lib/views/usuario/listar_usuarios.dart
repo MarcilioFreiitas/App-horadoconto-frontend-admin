@@ -10,6 +10,7 @@ class ListarUsuarios extends StatefulWidget {
 
 class _ListarUsuariosState extends State<ListarUsuarios> {
   List<Usuario> usuarios = [];
+  List<Usuario> usuariosFiltrados = [];
 
   @override
   void initState() {
@@ -27,10 +28,20 @@ class _ListarUsuariosState extends State<ListarUsuarios> {
       Iterable lista = json.decode(response.body);
       setState(() {
         usuarios = lista.map((json) => Usuario.fromJson(json)).toList();
+        usuariosFiltrados = usuarios;
       });
     } else {
       throw Exception('Falha ao carregar usuários');
     }
+  }
+
+  void _filtrarUsuarios(String valor) {
+    setState(() {
+      usuariosFiltrados = usuarios
+          .where((usuario) =>
+              usuario.nome.toLowerCase().contains(valor.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -39,22 +50,39 @@ class _ListarUsuariosState extends State<ListarUsuarios> {
       appBar: AppBar(
         title: Text('Listar Usuários'),
       ),
-      body: ListView.builder(
-        itemCount: usuarios.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(usuarios[index].nome),
-            subtitle: Text(usuarios[index].email),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetalhesUsuario(usuarios[index]),
-                ),
-              );
-            },
-          );
-        },
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: _filtrarUsuarios,
+              decoration: InputDecoration(
+                labelText: 'Pesquisar',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: usuariosFiltrados.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(usuariosFiltrados[index].nome),
+                  subtitle: Text(usuariosFiltrados[index].email),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            DetalhesUsuario(usuariosFiltrados[index]),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

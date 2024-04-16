@@ -10,6 +10,7 @@ class DeletarUsuario extends StatefulWidget {
 
 class _DeletarUsuarioState extends State<DeletarUsuario> {
   List<Usuario> usuarios = [];
+  List<Usuario> usuariosFiltrados = [];
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _DeletarUsuarioState extends State<DeletarUsuario> {
       List<dynamic> listaUsuarios = jsonDecode(response.body);
       setState(() {
         usuarios = listaUsuarios.map((json) => Usuario.fromJson(json)).toList();
+        usuariosFiltrados = usuarios;
       });
     } else {
       throw Exception('Falha ao carregar usuários');
@@ -47,49 +49,74 @@ class _DeletarUsuarioState extends State<DeletarUsuario> {
     }
   }
 
+  void _filtrarUsuarios(String valor) {
+    setState(() {
+      usuariosFiltrados = usuarios
+          .where((usuario) =>
+              usuario.nome.toLowerCase().contains(valor.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Deletar Usuário'),
       ),
-      body: ListView.builder(
-        itemCount: usuarios.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(usuarios[index].nome),
-            trailing: IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Confirmação'),
-                      content: Text(
-                          'Tem certeza de que deseja deletar este usuário?'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('Cancelar'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: Text('Deletar'),
-                          onPressed: () {
-                            deletarUsuario(usuarios[index].id);
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: _filtrarUsuarios,
+              decoration: InputDecoration(
+                labelText: 'Pesquisar',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: usuariosFiltrados.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(usuariosFiltrados[index].nome),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Confirmação'),
+                            content: Text(
+                                'Tem certeza de que deseja deletar este usuário?'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('Cancelar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Deletar'),
+                                onPressed: () {
+                                  deletarUsuario(usuariosFiltrados[index].id);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
                 );
               },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
