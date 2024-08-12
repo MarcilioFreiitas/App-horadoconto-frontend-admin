@@ -1,21 +1,17 @@
-import 'package:flutter_application_1/model/livro.dart';
-import 'package:flutter_application_1/model/usuario.dart';
-
-// ignore: constant_identifier_names
-enum StatusEmprestimo { ATIVO, ATRASADO, PENDENDE, APROVADO, REJEITADO }
+enum StatusEmprestimo { ATRASADO, REJEITADO, PENDENTE, EMPRESTADO }
 
 class Emprestimo {
   final String id;
-  final Usuario usuario;
-  final Livro livro;
+  final String nomeUsuario;
+  final String tituloLivro;
   final String dataRetirada;
   final String dataDevolucao;
   final StatusEmprestimo statusEmprestimo;
 
   Emprestimo({
     required this.id,
-    required this.usuario,
-    required this.livro,
+    required this.nomeUsuario,
+    required this.tituloLivro,
     required this.dataRetirada,
     required this.dataDevolucao,
     required this.statusEmprestimo,
@@ -24,26 +20,24 @@ class Emprestimo {
   factory Emprestimo.fromJson(Map<String, dynamic> json) {
     return Emprestimo(
       id: json['id'].toString(),
-      usuario: Usuario.fromJson(json['usuario']),
-      livro: Livro.fromJson(json['livro']),
+      nomeUsuario: json['nomeUsuario'],
+      tituloLivro: json['tituloLivro'],
       dataRetirada: json['dataRetirada'],
       dataDevolucao: json['dataDevolucao'],
-      statusEmprestimo: StatusEmprestimo.values.firstWhere((e) =>
-          e.toString() == 'StatusEmprestimo.${json['statusEmprestimo']}'),
+      statusEmprestimo: StatusEmprestimo.values.firstWhere(
+        (e) => e.toString() == 'StatusEmprestimo.${json['statusEmprestimo']}',
+      ),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'usuario': usuario.toJson(),
-      'livro': livro.toJson(),
+      'nomeUsuario': nomeUsuario,
+      'tituloLivro': tituloLivro,
       'dataRetirada': dataRetirada,
       'dataDevolucao': dataDevolucao,
-      'statusEmprestimo': statusEmprestimo
-          .toString()
-          .split('.')
-          .last, // Isso irá retornar apenas o valor do enum
+      'statusEmprestimo': statusEmprestimo.toString().split('.').last,
     };
   }
 }

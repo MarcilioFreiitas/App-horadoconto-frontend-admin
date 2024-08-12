@@ -21,7 +21,7 @@ class _DeletarUsuarioState extends State<DeletarUsuario> {
   Future<void> carregarUsuarios() async {
     final response = await http.get(
       Uri.parse(
-          'http://10.0.0.106:8080/usuarios/listar'), // Substitua pelo endereço da sua API
+          'http://localhost:8080/usuarios/listar'), // Substitua pelo endereço da sua API
     );
 
     if (response.statusCode == 200) {
@@ -38,7 +38,7 @@ class _DeletarUsuarioState extends State<DeletarUsuario> {
   Future<void> deletarUsuario(String id) async {
     final response = await http.delete(
       Uri.parse(
-          'http://10.0.0.106:8080/usuarios/apagar/$id'), // Substitua pelo endereço da sua API
+          'http://localhost:8080/usuarios/apagar/$id'), // Substitua pelo endereço da sua API
     );
 
     if (response.statusCode == 204) {

@@ -8,7 +8,7 @@ import 'dart:convert';
 
 class ListaLivrosDelete extends StatelessWidget {
   Future<List<Livro>> fetchLivros() async {
-    var url = Uri.parse('http://10.0.0.106:8080/livros/listar');
+    var url = Uri.parse('http://localhost:8080/livros/listar');
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -65,7 +65,7 @@ class DetalhesLivro extends StatelessWidget {
   DetalhesLivro({Key? key, required this.livro}) : super(key: key);
 
   Future<void> deleteLivro(BuildContext context) async {
-    var url = Uri.parse('http://10.0.0.106:8080/livros/apagar/${livro.id}');
+    var url = Uri.parse('http://localhost:8080/livros/apagar/${livro.id}');
     var response = await http.delete(url);
 
     if (response.statusCode == 200) {

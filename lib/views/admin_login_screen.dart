@@ -16,7 +16,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
   Future<void> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('http://10.0.0.106:8080/auth/loginadmin'),
+      Uri.parse('http://localhost:8080/auth/loginadmin'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

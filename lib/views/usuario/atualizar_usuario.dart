@@ -21,7 +21,7 @@ class _AtualizarUsuarioState extends State<AtualizarUsuario> {
   Future<void> carregarUsuarios() async {
     final response = await http.get(
       Uri.parse(
-          'http://10.0.0.106:8080/usuarios/listar'), // Substitua pelo endereço da sua API
+          'http://localhost:8080/usuarios/listar'), // Substitua pelo endereço da sua API
     );
 
     if (response.statusCode == 200) {

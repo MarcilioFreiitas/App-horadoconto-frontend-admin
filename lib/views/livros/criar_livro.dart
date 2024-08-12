@@ -38,7 +38,7 @@ class _CriarLivroState extends State<CriarLivro> {
 
   Future uploadImage(BuildContext context) async {
     var request = http.MultipartRequest(
-        'POST', Uri.parse('http://10.0.0.106:8080/livros/uploadCapa'));
+        'POST', Uri.parse('http://localhost:8080/livros/uploadCapa'));
     request.files.add(
         await http.MultipartFile.fromPath('imagem_capa', _imagemCapa!.path));
     var response = await request.send();

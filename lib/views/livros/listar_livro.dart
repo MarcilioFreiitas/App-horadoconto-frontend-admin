@@ -20,7 +20,7 @@ class _ListaLivrosState extends State<ListaLivros> {
 
   Future<List<Livro>> fetchLivros() async {
     // Substitua a URL abaixo pela URL do seu backend
-    var url = Uri.parse('http://10.0.0.106:8080/livros/listar');
+    var url = Uri.parse('http://localhost:8080/livros/listar');
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -49,7 +49,7 @@ class _ListaLivrosState extends State<ListaLivros> {
               itemBuilder: (context, index) {
                 Widget leadingWidget;
                 try {
-                  leadingWidget = _getImage('http://10.0.0.106:8080' +
+                  leadingWidget = _getImage('http://localhost:8080' +
                       snapshot.data![index].imagem_capa);
                 } catch (e) {
                   leadingWidget = const Icon(Icons.error);

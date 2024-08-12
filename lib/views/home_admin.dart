@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/views/emprestimos/gerenciar_emprestimo.dart';
 import 'package:flutter_application_1/views/livros/gerenciar_livros.dart';
 import 'package:flutter_application_1/views/usuario/gerenciar_usuario.dart';
 
@@ -35,7 +36,11 @@ class HomeAdmin extends StatelessWidget {
             ElevatedButton(
               child: Text('Gerenciar Empréstimos'),
               onPressed: () {
-                // Adicione sua lógica de gerenciamento de empréstimos aqui
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GerenciarEmprestimo()),
+                ); //
               },
             ),
             ElevatedButton(

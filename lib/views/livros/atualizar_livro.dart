@@ -8,7 +8,7 @@ import 'dart:convert';
 
 class ListaLivrosPut extends StatelessWidget {
   Future<List<Livro>> fetchLivros() async {
-    var url = Uri.parse('http://10.0.0.106:8080/livros/listar');
+    var url = Uri.parse('http://localhost:8080/livros/listar');
     var response = await http.get(url);
 
     if (response.statusCode == 200) {

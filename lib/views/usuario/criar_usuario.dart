@@ -18,7 +18,7 @@ class _CriarUsuarioState extends State<CriarUsuario> {
   Future<void> cadastrarUsuario() async {
     final response = await http.post(
       Uri.parse(
-          'http://10.0.0.106:8080/auth/register'), // Substitua pelo endereço da sua API
+          'http://localhost:8080/auth/register'), // Substitua pelo endereço da sua API
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
