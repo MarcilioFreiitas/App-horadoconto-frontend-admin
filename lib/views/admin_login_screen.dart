@@ -59,6 +59,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 labelText: 'Email',
               ),
             ),
+            SizedBox(height: 10), // Espaço adicionado antes do botão de login
             TextField(
               controller: passwordController,
               decoration: InputDecoration(
@@ -66,6 +67,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               ),
               obscureText: true,
             ),
+            SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 String email = emailController.text;

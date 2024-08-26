@@ -1,4 +1,4 @@
-enum StatusEmprestimo { ATRASADO, REJEITADO, PENDENTE, EMPRESTADO }
+enum StatusEmprestimo { ATRASADO, REJEITADO, PENDENTE, EMPRESTADO, DEVOLVIDO }
 
 class Emprestimo {
   final String id;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/emprestimo.dart';
+import 'package:flutter_application_1/views/emprestimos/detalhes_livro.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -10,11 +11,18 @@ class GerenciarEmprestimo extends StatefulWidget {
 
 class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
   List<Emprestimo> emprestimos = [];
+  TextEditingController _searchController = TextEditingController();
+  String _searchText = "";
 
   @override
   void initState() {
     super.initState();
     fetchEmprestimos();
+    _searchController.addListener(() {
+      setState(() {
+        _searchText = _searchController.text.toLowerCase();
+      });
+    });
   }
 
   Future<void> fetchEmprestimos() async {
@@ -85,46 +93,75 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredEmprestimos = emprestimos.where((emprestimo) {
+      final livroNome = emprestimo.tituloLivro.toLowerCase();
+      return livroNome.contains(_searchText);
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Gerenciar Empréstimos'),
       ),
-      body: ListView.builder(
-        itemCount: emprestimos.length,
-        itemBuilder: (context, index) {
-          final emprestimo = emprestimos[index];
-          return ListTile(
-            title: Text('Empréstimo ${emprestimo.id}'),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Usuário: ${emprestimo.nomeUsuario}'),
-                Text('Livro: ${emprestimo.tituloLivro}'),
-                Text('Data de Retirada: ${emprestimo.dataRetirada}'),
-                Text('Data de Devolução: ${emprestimo.dataDevolucao}'),
-                Text(
-                    'Status: ${emprestimo.statusEmprestimo.toString().split('.').last}'),
-              ],
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: 'Pesquisar por nome do livro',
+                prefixIcon: Icon(Icons.search),
+              ),
             ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.check_circle_sharp),
-                  onPressed: () => aprovarEmprestimo(emprestimo.id),
-                ),
-                IconButton(
-                  icon: Icon(Icons.backspace_outlined),
-                  onPressed: () => rejeitarEmprestimo(emprestimo.id),
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () => rejeitarEmprestimo(emprestimo.id),
-                ),
-              ],
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredEmprestimos.length,
+              itemBuilder: (context, index) {
+                final emprestimo = filteredEmprestimos[index];
+                return ListTile(
+                  title: Text('Empréstimo ${emprestimo.id}'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Usuário: ${emprestimo.nomeUsuario}'),
+                      Text('Livro: ${emprestimo.tituloLivro}'),
+                      Text('Data de Retirada: ${emprestimo.dataRetirada}'),
+                      Text('Data de Devolução: ${emprestimo.dataDevolucao}'),
+                      Text(
+                          'Status: ${emprestimo.statusEmprestimo.toString().split('.').last}'),
+                    ],
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DetalhesLivroScreen(emprestimo: emprestimo),
+                            ),
+                          );
+                        },
+                        child: Text('Devolução'),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.check_circle_sharp),
+                        onPressed: () => aprovarEmprestimo(emprestimo.id),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.backspace_outlined),
+                        onPressed: () => rejeitarEmprestimo(emprestimo.id),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
