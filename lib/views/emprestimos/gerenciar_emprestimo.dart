@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/emprestimo.dart';
+import 'package:flutter_application_1/views/emprestimos/detalhes_emprestimo.dart';
 import 'package:flutter_application_1/views/emprestimos/detalhes_livro.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -13,6 +14,7 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
   List<Emprestimo> emprestimos = [];
   TextEditingController _searchController = TextEditingController();
   String _searchText = "";
+  String _filterStatus = "Todos";
 
   @override
   void initState() {
@@ -95,12 +97,60 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
   Widget build(BuildContext context) {
     final filteredEmprestimos = emprestimos.where((emprestimo) {
       final livroNome = emprestimo.tituloLivro.toLowerCase();
-      return livroNome.contains(_searchText);
+      final status = emprestimo.statusEmprestimo.toString().split('.').last;
+      return livroNome.contains(_searchText) &&
+          (_filterStatus == "Todos" || status == _filterStatus);
     }).toList();
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Gerenciar Empréstimos'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _filterStatus = "Todos";
+              });
+            },
+            child: Text(
+              'Todos',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _filterStatus = "EMPRESTADO";
+              });
+            },
+            child: Text(
+              'Emprestado',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _filterStatus = "PENDENTE";
+              });
+            },
+            child: Text(
+              'Pendente',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _filterStatus = "DEVOLVIDO";
+              });
+            },
+            child: Text(
+              'Devolvido',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -135,28 +185,48 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  DetalhesLivroScreen(emprestimo: emprestimo),
-                            ),
-                          );
-                        },
-                        child: Text('Devolução'),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.check_circle_sharp),
-                        onPressed: () => aprovarEmprestimo(emprestimo.id),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.backspace_outlined),
-                        onPressed: () => rejeitarEmprestimo(emprestimo.id),
-                      ),
+                      if (emprestimo.statusEmprestimo
+                              .toString()
+                              .split('.')
+                              .last ==
+                          'EMPRESTADO')
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetalhesLivroScreen(emprestimo: emprestimo),
+                              ),
+                            );
+                          },
+                          child: Text('Devolução'),
+                        ),
+                      if (emprestimo.statusEmprestimo
+                              .toString()
+                              .split('.')
+                              .last ==
+                          'PENDENTE') ...[
+                        IconButton(
+                          icon: Icon(Icons.check_circle_sharp),
+                          onPressed: () => aprovarEmprestimo(emprestimo.id),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.backspace_outlined),
+                          onPressed: () => rejeitarEmprestimo(emprestimo.id),
+                        ),
+                      ],
                     ],
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            DetalhesEmprestimoScreen(emprestimo: emprestimo),
+                      ),
+                    );
+                  },
                 );
               },
             ),

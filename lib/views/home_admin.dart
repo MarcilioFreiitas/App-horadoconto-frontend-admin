@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/emprestimos/gerenciar_emprestimo.dart';
 import 'package:flutter_application_1/views/livros/gerenciar_livros.dart';
+import 'package:flutter_application_1/views/livros/listar_livro.dart';
 import 'package:flutter_application_1/views/usuario/gerenciar_usuario.dart';
 
 class HomeAdmin extends StatelessWidget {
@@ -29,7 +30,7 @@ class HomeAdmin extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GerenciarLivros()),
+                  MaterialPageRoute(builder: (context) => ListaLivros()),
                 );
               },
             ),

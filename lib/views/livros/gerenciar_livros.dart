@@ -37,12 +37,7 @@ class GerenciarLivros extends StatelessWidget {
             SizedBox(height: 16),
             ElevatedButton(
               child: Text('Atualizar Livro'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ListaLivrosPut()),
-                );
-              },
+              onPressed: () {},
             ),
             SizedBox(height: 16),
             ElevatedButton(

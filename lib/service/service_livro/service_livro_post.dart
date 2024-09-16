@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/livros/criar_livro.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:http_parser/http_parser.dart';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'dart:html' as html;
+import 'package:http_parser/http_parser.dart'; // Importe a biblioteca correta
+// Importe o serviço de seleção de arquivos
 
 void createLivro(
     String autor,
@@ -12,34 +14,45 @@ void createLivro(
     bool disponibilidade,
     String sinopse,
     String isbn,
-    String imagem,
+    html.File imagemCapa, // Adicione a imagem como parâmetro
     BuildContext context) async {
-  var dio = Dio();
-  var formData = FormData.fromMap({
-    'autor': autor,
-    'titulo': titulo,
-    'genero': genero,
-    'disponibilidade': disponibilidade.toString(),
-    'sinopse': sinopse,
-    'isbn': isbn,
-    'imagem_capa': await MultipartFile.fromFile(imagem,
-        contentType: MediaType('image', 'jpeg')),
-  });
+  try {
+    final reader = html.FileReader();
+    reader.readAsArrayBuffer(imagemCapa);
+    await reader.onLoad.first;
 
-  var response = await dio.post(
-    'http://10.0.0.106:8080/livros/salvar',
-    data: formData,
-    options: Options(
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    ),
-  );
+    final bytes = reader.result as Uint8List;
+    final formData = FormData.fromMap({
+      'autor': autor,
+      'titulo': titulo,
+      'genero': genero,
+      'disponibilidade': disponibilidade.toString(),
+      'sinopse': sinopse,
+      'isbn': isbn,
+      'imagem_capa': MultipartFile.fromBytes(bytes,
+          filename: imagemCapa.name, contentType: MediaType('image', 'jpeg')),
+    });
 
-  if (response.statusCode == 200) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Livro inserido com sucesso !')));
-  } else {
-    throw Exception('Falha ao inserir o livro');
+    var dio = Dio();
+    var response = await dio.post(
+      'http://localhost:8080/livros/salvar',
+      data: formData,
+      options: Options(
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Livro inserido com sucesso!')));
+      Navigator.pop(context); // Volta para a tela anterior
+    } else {
+      throw Exception('Falha ao inserir o livro');
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao selecionar o arquivo: $e')));
   }
 }
