@@ -5,7 +5,19 @@ import 'package:flutter_application_1/service/service_livro/service_livro_post.d
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
-// Importe o serviço de seleção de arquivos
+
+enum Genero {
+  FICCAO,
+  NAO_FICCAO,
+  ROMANCE,
+  FANTASIA,
+  TERROR,
+  MISTERIO,
+  BIOGRAFIA,
+  HISTORIA,
+  CIENCIA,
+  POESIA,
+}
 
 class CriarLivro extends StatefulWidget {
   @override
@@ -16,7 +28,7 @@ class _CriarLivroState extends State<CriarLivro> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _autorController = TextEditingController();
-  final TextEditingController _generoController = TextEditingController();
+  late Genero _generoSelecionado;
   late bool _disponibilidade;
   final TextEditingController _sinopseController = TextEditingController();
   final TextEditingController _isbnController = TextEditingController();
@@ -26,6 +38,7 @@ class _CriarLivroState extends State<CriarLivro> {
   void initState() {
     super.initState();
     _disponibilidade = false;
+    _generoSelecionado = Genero.FICCAO; // Valor padrão
   }
 
   Future<void> pickImage() async {
@@ -69,12 +82,23 @@ class _CriarLivroState extends State<CriarLivro> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _generoController,
+              DropdownButtonFormField<Genero>(
+                value: _generoSelecionado,
                 decoration: InputDecoration(labelText: 'Gênero'),
+                items: Genero.values.map((Genero genero) {
+                  return DropdownMenuItem<Genero>(
+                    value: genero,
+                    child: Text(genero.toString().split('.').last),
+                  );
+                }).toList(),
+                onChanged: (Genero? newValue) {
+                  setState(() {
+                    _generoSelecionado = newValue!;
+                  });
+                },
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira o Gênero';
+                  if (value == null) {
+                    return 'Por favor, selecione um gênero';
                   }
                   return null;
                 },
@@ -123,7 +147,8 @@ class _CriarLivroState extends State<CriarLivro> {
                     if (_imagemCapa != null) {
                       String titulo = _tituloController.text;
                       String autor = _autorController.text;
-                      String genero = _generoController.text;
+                      String genero =
+                          _generoSelecionado.toString().split('.').last;
                       String sinopse = _sinopseController.text;
                       bool disponibilidade = _disponibilidade;
                       String isbn = _isbnController.text;

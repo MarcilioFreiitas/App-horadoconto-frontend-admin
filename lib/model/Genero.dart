@@ -1,0 +1,12 @@
+enum Genero {
+  FICCAO,
+  NAO_FICCAO,
+  ROMANCE,
+  FANTASIA,
+  TERROR,
+  MISTERIO,
+  BIOGRAFIA,
+  HISTORIA,
+  CIENCIA,
+  POESIA,
+}

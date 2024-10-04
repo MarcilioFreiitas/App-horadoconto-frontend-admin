@@ -27,7 +27,8 @@ class _AtualizarLivroState extends State<AtualizarLivro> {
     super.initState();
     _tituloController = TextEditingController(text: widget.livro.titulo);
     _autorController = TextEditingController(text: widget.livro.autor);
-    _generoController = TextEditingController(text: widget.livro.genero);
+    _generoController = TextEditingController(
+        text: widget.livro.genero.toString().split('.').last);
     _sinopseController = TextEditingController(text: widget.livro.sinopse);
     _isbnController = TextEditingController(text: widget.livro.isbn);
     _imagemController = TextEditingController(text: widget.livro.imagem_capa);
@@ -44,7 +45,7 @@ class _AtualizarLivroState extends State<AtualizarLivro> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: <Widget>[
               TextFormField(
                 controller: _tituloController,
