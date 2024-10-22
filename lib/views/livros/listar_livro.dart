@@ -35,7 +35,6 @@ class _ListaLivrosState extends State<ListaLivros> {
   Future<List<Livro>> fetchLivros() async {
     var url = Uri.parse('http://localhost:8080/livros/listar');
     var response = await http.get(url);
-
     if (response.statusCode == 200) {
       Iterable lista = json.decode(response.body);
       List<Livro> livros =
@@ -60,7 +59,6 @@ class _ListaLivrosState extends State<ListaLivros> {
   Future<void> deleteLivro(BuildContext context, Livro livro) async {
     var url = Uri.parse('http://localhost:8080/livros/apagar/${livro.id}');
     var response = await http.delete(url);
-
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -95,6 +93,7 @@ class _ListaLivrosState extends State<ListaLivros> {
             filterLivros(query);
           },
         ),
+        backgroundColor: Colors.black,
       ),
       body: FutureBuilder<List<Livro>>(
         future: futureLivros,
@@ -111,24 +110,47 @@ class _ListaLivrosState extends State<ListaLivros> {
             return ListView.builder(
               itemCount: livrosFiltrados.length,
               itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    if (index == 0)
-                      SizedBox(
-                          height:
-                              140.0), // Espaçamento entre o AppBar e o primeiro item
-                    ListTile(
-                      leading: Container(
-                        width: 130.0, // Defina a largura desejada
-                        height: 250.0, // Defina a altura desejada
-                        child: FittedBox(
+                String urlImagem = 'http://localhost:8080' +
+                    livrosFiltrados[index].imagem_capa;
+                return Card(
+                  margin: EdgeInsets.all(10.0),
+                  child: Container(
+                    height: 150.0, // Aumentando a altura do Card
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(10.0),
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.network(
+                          urlImagem,
+                          width: 80,
+                          height: 120,
                           fit: BoxFit.cover,
-                          child: _getImage('http://localhost:8080' +
-                              livrosFiltrados[index].imagem_capa),
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.error, color: Colors.red);
+                          },
                         ),
                       ),
                       title: Text(livrosFiltrados[index].titulo),
-                      subtitle: Text(livrosFiltrados[index].autor),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Autor: ${livrosFiltrados[index].autor}'),
+                          Text('ISBN: ${livrosFiltrados[index].isbn}'),
+                          Text(
+                            livrosFiltrados[index].disponibilidade
+                                ? 'Disponível'
+                                : 'Indisponível',
+                            style: TextStyle(
+                              color: livrosFiltrados[index].disponibilidade
+                                  ? Colors.green
+                                  : Colors.red,
+                            ),
+                          ),
+                          Text(
+                            'Sinopse: ${utf8.decode(livrosFiltrados[index].sinopse.runes.toList())}',
+                          ),
+                        ],
+                      ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -143,7 +165,6 @@ class _ListaLivrosState extends State<ListaLivros> {
                                   ),
                                 ),
                               );
-
                               if (result == true) {
                                 carregarLivros();
                               }
@@ -183,8 +204,7 @@ class _ListaLivrosState extends State<ListaLivros> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 250.0), // Espaçamento entre os itens
-                  ],
+                  ),
                 );
               },
             );
@@ -197,23 +217,13 @@ class _ListaLivrosState extends State<ListaLivros> {
             context,
             MaterialPageRoute(builder: (context) => CriarLivro()),
           );
-
           if (result == true) {
             carregarLivros();
           }
         },
+        backgroundColor: Colors.black,
         child: Icon(Icons.add),
       ),
-    );
-  }
-
-  Widget _getImage(String imageUrl) {
-    return Image.network(
-      imageUrl,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        return Icon(Icons.error);
-      },
     );
   }
 }

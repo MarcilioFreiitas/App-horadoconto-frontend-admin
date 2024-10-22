@@ -1,9 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/emprestimo.dart';
 import 'package:flutter_application_1/views/emprestimos/detalhes_emprestimo.dart';
 import 'package:flutter_application_1/views/emprestimos/detalhes_livro.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class GerenciarEmprestimo extends StatefulWidget {
   @override
@@ -101,10 +101,10 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
       return livroNome.contains(_searchText) &&
           (_filterStatus == "Todos" || status == _filterStatus);
     }).toList();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Gerenciar Empréstimos'),
+        backgroundColor: Colors.black,
         actions: [
           TextButton(
             onPressed: () {
@@ -169,64 +169,97 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
               itemCount: filteredEmprestimos.length,
               itemBuilder: (context, index) {
                 final emprestimo = filteredEmprestimos[index];
-                return ListTile(
-                  title: Text('Empréstimo ${emprestimo.id}'),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Usuário: ${emprestimo.nomeUsuario}'),
-                      Text('Livro: ${emprestimo.tituloLivro}'),
-                      Text('Data de Retirada: ${emprestimo.dataRetirada}'),
-                      Text('Data de Devolução: ${emprestimo.dataDevolucao}'),
-                      Text(
-                          'Status: ${emprestimo.statusEmprestimo.toString().split('.').last}'),
-                    ],
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (emprestimo.statusEmprestimo
-                              .toString()
-                              .split('.')
-                              .last ==
-                          'EMPRESTADO')
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    DetalhesLivroScreen(emprestimo: emprestimo),
-                              ),
-                            );
-                          },
-                          child: Text('Devolução'),
-                        ),
-                      if (emprestimo.statusEmprestimo
-                              .toString()
-                              .split('.')
-                              .last ==
-                          'PENDENTE') ...[
-                        IconButton(
-                          icon: Icon(Icons.check_circle_sharp),
-                          onPressed: () => aprovarEmprestimo(emprestimo.id),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.backspace_outlined),
-                          onPressed: () => rejeitarEmprestimo(emprestimo.id),
-                        ),
-                      ],
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            DetalhesEmprestimoScreen(emprestimo: emprestimo),
+                Color statusColor;
+                switch (
+                    emprestimo.statusEmprestimo.toString().split('.').last) {
+                  case 'DEVOLVIDO':
+                    statusColor = Colors.grey;
+                    break;
+                  case 'PENDENTE':
+                    statusColor = Colors.yellow;
+                    break;
+                  case 'EMPRESTADO':
+                    statusColor = Colors.green;
+                    break;
+                  case 'REJEITADO':
+                    statusColor = Colors.red;
+                    break;
+                  default:
+                    statusColor = Colors.black;
+                }
+                return Card(
+                  margin: EdgeInsets.all(10.0),
+                  child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    height: 150.0, // Definindo a altura do Card
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(10.0),
+                      title: Text(
+                        'Empréstimo ${emprestimo.id}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    );
-                  },
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Usuário: ${emprestimo.nomeUsuario}'),
+                          Text('Livro: ${emprestimo.tituloLivro}'),
+                          Text('Data de Retirada: ${emprestimo.dataRetirada}'),
+                          Text(
+                              'Data de Devolução: ${emprestimo.dataDevolucao}'),
+                          Text(
+                            'Status: ${emprestimo.statusEmprestimo.toString().split('.').last}',
+                            style: TextStyle(color: statusColor),
+                          ),
+                        ],
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (emprestimo.statusEmprestimo
+                                  .toString()
+                                  .split('.')
+                                  .last ==
+                              'EMPRESTADO')
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetalhesLivroScreen(
+                                        emprestimo: emprestimo),
+                                  ),
+                                );
+                              },
+                              child: Text('Devolução'),
+                            ),
+                          if (emprestimo.statusEmprestimo
+                                  .toString()
+                                  .split('.')
+                                  .last ==
+                              'PENDENTE') ...[
+                            IconButton(
+                              icon: Icon(Icons.check_circle_sharp),
+                              onPressed: () => aprovarEmprestimo(emprestimo.id),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.backspace_outlined),
+                              onPressed: () =>
+                                  rejeitarEmprestimo(emprestimo.id),
+                            ),
+                          ],
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetalhesEmprestimoScreen(
+                                emprestimo: emprestimo),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 );
               },
             ),

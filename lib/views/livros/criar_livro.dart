@@ -1,10 +1,7 @@
-import 'dart:io';
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/service/file_picker_service.dart';
 import 'package:flutter_application_1/service/service_livro/service_livro_post.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'dart:html' as html;
 
 enum Genero {
   FICCAO,
@@ -33,6 +30,7 @@ class _CriarLivroState extends State<CriarLivro> {
   final TextEditingController _sinopseController = TextEditingController();
   final TextEditingController _isbnController = TextEditingController();
   html.File? _imagemCapa;
+  String? _imagemCapaUrl;
 
   @override
   void initState() {
@@ -46,6 +44,7 @@ class _CriarLivroState extends State<CriarLivro> {
     setState(() {
       if (selectedImage != null) {
         _imagemCapa = selectedImage; // Armazene o arquivo selecionado
+        _imagemCapaUrl = html.Url.createObjectUrl(_imagemCapa);
       }
     });
   }
@@ -55,12 +54,13 @@ class _CriarLivroState extends State<CriarLivro> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Criar Livro'),
+        backgroundColor: Colors.black,
       ),
       body: Form(
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child: ListView(
             children: <Widget>[
               TextFormField(
                 controller: _tituloController,
@@ -135,34 +135,73 @@ class _CriarLivroState extends State<CriarLivro> {
                 secondary: const Icon(Icons.book),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                child: Text('Selecionar imagem da capa'),
-                onPressed: pickImage,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        minimumSize: Size(double.infinity, 50), // Botão maior
+                      ),
+                      child: Text('Selecionar imagem da capa'),
+                      onPressed: pickImage,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        minimumSize: Size(double.infinity, 50), // Botão maior
+                      ),
+                      child: Text('Cadastrar livro'),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          if (_imagemCapa != null) {
+                            String titulo = _tituloController.text;
+                            String autor = _autorController.text;
+                            String genero =
+                                _generoSelecionado.toString().split('.').last;
+                            String sinopse = _sinopseController.text;
+                            bool disponibilidade = _disponibilidade;
+                            String isbn = _isbnController.text;
+                            createLivro(autor, titulo, genero, disponibilidade,
+                                sinopse, isbn, _imagemCapa!, context);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'Por favor, selecione uma imagem da capa')));
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                child: Text('Cadastrar livro'),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    if (_imagemCapa != null) {
-                      String titulo = _tituloController.text;
-                      String autor = _autorController.text;
-                      String genero =
-                          _generoSelecionado.toString().split('.').last;
-                      String sinopse = _sinopseController.text;
-                      bool disponibilidade = _disponibilidade;
-                      String isbn = _isbnController.text;
-                      createLivro(autor, titulo, genero, disponibilidade,
-                          sinopse, isbn, _imagemCapa!, context);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text('Por favor, selecione uma imagem da capa')));
-                    }
-                  }
-                },
-              ),
+              if (_imagemCapaUrl != null)
+                Center(
+                  child: Container(
+                    height: 150,
+                    child: Image.network(
+                      _imagemCapaUrl!,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.grey[850],
+        child: Container(
+          height: 50.0,
+          alignment: Alignment.center,
+          child: Text(
+            'Hora do conto © 2024 IFPE - Palmares. Todos os direitos reservados.',
+            style: TextStyle(color: Colors.white),
           ),
         ),
       ),
