@@ -37,15 +37,6 @@ class GerenciarUsuario extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AtualizarUsuario()),
-                );
-              },
-              child: Text('Atualizar Usuário'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
                   MaterialPageRoute(builder: (context) => ListarUsuarios()),
                 );
               },

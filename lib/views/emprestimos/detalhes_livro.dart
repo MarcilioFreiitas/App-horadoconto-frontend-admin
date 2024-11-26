@@ -51,10 +51,15 @@ class DetalhesLivroScreen extends StatelessWidget {
         ),
       );
 
-      // Recarrega a página automaticamente
-      Navigator.of(context).pop(); // Volta à tela anterior
+      // Volta à tela anterior e indica que a devolução foi realizada
+      Navigator.of(context).pop(true);
     } else {
       print('Erro ao confirmar devolução: ${response.statusCode}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao realizar devolução.'),
+        ),
+      );
     }
   }
 
@@ -70,7 +75,7 @@ class DetalhesLivroScreen extends StatelessWidget {
           children: [
             Text('Nome: ${emprestimo.nomeUsuario}'),
             Text('Título: ${emprestimo.tituloLivro}'),
-            Text('Data de devolução: ${emprestimo.dataRetirada}'),
+            Text('Data de retirada: ${emprestimo.dataRetirada}'),
             Text('Data de devolução: ${emprestimo.dataDevolucao}'),
             Text('Status: ${emprestimo.statusEmprestimo}'),
             // ... (outras informações relevantes sobre o livro)

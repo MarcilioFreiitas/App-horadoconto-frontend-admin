@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/livro.dart';
@@ -34,6 +35,7 @@ class _AtualizarLivroState extends State<AtualizarLivro> {
   late TextEditingController _sinopseController;
   late TextEditingController _isbnController;
   html.File? _imagemCapa;
+  Uint8List? _imagemCapaBytes;
   String? _imagemCapaUrl;
   late bool _disponibilidade;
 
@@ -56,7 +58,14 @@ class _AtualizarLivroState extends State<AtualizarLivro> {
     setState(() {
       if (selectedImage != null) {
         _imagemCapa = selectedImage; // Armazene o arquivo selecionado
-        _imagemCapaUrl = html.Url.createObjectUrl(_imagemCapa);
+        final reader = html.FileReader();
+        reader.readAsArrayBuffer(_imagemCapa!);
+        reader.onLoadEnd.listen((e) {
+          setState(() {
+            _imagemCapaBytes = reader.result as Uint8List?;
+            _imagemCapaUrl = html.Url.createObjectUrlFromBlob(_imagemCapa!);
+          });
+        });
       }
     });
   }
@@ -224,22 +233,25 @@ class _AtualizarLivroState extends State<AtualizarLivro> {
   Future<void> atualizarLivro() async {
     var url =
         Uri.parse('http://localhost:8080/livros/alterar/${widget.livro.id}');
-    var response = await http.put(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        "Access-Control-Allow-Origin": "*"
-      },
-      body: jsonEncode(<String, dynamic>{
-        'titulo': _tituloController.text,
-        'autor': _autorController.text,
-        'genero': _generoSelecionado.toString().split('.').last,
-        'sinopse': _sinopseController.text,
-        'isbn': _isbnController.text,
-        'disponibilidade': _disponibilidade,
-        'imagem_capa': _imagemCapaUrl,
-      }),
-    );
+
+    var request = http.MultipartRequest('PUT', url)
+      ..fields['titulo'] = _tituloController.text
+      ..fields['autor'] = _autorController.text
+      ..fields['genero'] = _generoSelecionado.toString().split('.').last
+      ..fields['sinopse'] = _sinopseController.text
+      ..fields['isbn'] = _isbnController.text
+      ..fields['disponibilidade'] = _disponibilidade.toString();
+
+    if (_imagemCapaBytes != null) {
+      request.files.add(http.MultipartFile.fromBytes(
+        'imagem_capa',
+        _imagemCapaBytes!,
+        filename: _imagemCapa!.name,
+      ));
+    }
+
+    var response = await request.send();
+
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Livro atualizado com sucesso.')));

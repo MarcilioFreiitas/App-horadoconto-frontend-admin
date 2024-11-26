@@ -41,6 +41,7 @@ dependencies:
   shared_preferences: ^2.2.2
   flutter_secure_storage: ^9.0.0
   flutter_cors: ^1.5.0
+  cpf_cnpj_validator: ^2.0.0-nullsafety
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +61,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -25,17 +25,21 @@ class Usuario {
 
   factory Usuario.fromJson(Map<String, dynamic> json) {
     return Usuario(
-      id: json['id'].toString(),
-      nome: json['nome'],
-      sobreNome: json['sobreNome'],
-      cpf: json['cpf'],
-      email: json['email'],
-      senha: json['senha'],
-      role: UserRoles.values
-          .firstWhere((e) => e.toString() == 'UserRoles.${json['role']}'),
-      emprestimos: (json['emprestimos'] as List)
-          .map((emprestimo) => Emprestimo.fromJson(emprestimo))
-          .toList(),
+      id: json['id']?.toString() ?? '',
+      nome: json['nome'] ?? 'Nome não informado',
+      sobreNome: json['sobreNome'] ?? 'Sobrenome não informado',
+      cpf: json['cpf'] ?? 'CPF não informado',
+      email: json['email'] ?? 'Email não informado',
+      senha: json['senha'] ?? '',
+      role: UserRoles.values.firstWhere(
+        (e) => e.toString() == 'UserRoles.${json['role']}',
+        orElse: () => UserRoles.USER, // Valor padrão caso o papel seja nulo
+      ),
+      emprestimos: json['emprestimos'] != null
+          ? (json['emprestimos'] as List)
+              .map((emprestimo) => Emprestimo.fromJson(emprestimo))
+              .toList()
+          : [],
     );
   }
 
@@ -47,10 +51,8 @@ class Usuario {
       'cpf': cpf,
       'email': email,
       'senha': senha,
-      'role': role
-          .toString()
-          .split('.')
-          .last, // Isso irá retornar apenas 'ADMIN' ou 'USER'
+      'role':
+          role.toString().split('.').last, // Retorna apenas 'ADMIN' ou 'USER'
       'emprestimos':
           emprestimos.map((emprestimo) => emprestimo.toJson()).toList(),
     };

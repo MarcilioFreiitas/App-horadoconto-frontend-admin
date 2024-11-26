@@ -50,6 +50,24 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
   }
 
   Future<void> aprovarEmprestimo(String id) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Por favor, aguarde...'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text('Enviando e-mail de confirmação...'),
+            ],
+          ),
+        );
+      },
+    );
+
     try {
       final response = await http.put(
         Uri.parse('http://localhost:8080/emprestimo/aprovar/$id'),
@@ -57,6 +75,7 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
+      Navigator.of(context).pop(); // Fecha o diálogo de espera
       if (response.statusCode == 200) {
         print('Empréstimo aprovado com sucesso');
         Navigator.pushReplacement(
@@ -67,6 +86,7 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
         throw Exception('Falha ao aprovar empréstimo');
       }
     } catch (e) {
+      Navigator.of(context).pop(); // Fecha o diálogo de espera
       print('Erro ao fazer a requisição: $e');
     }
   }
@@ -97,13 +117,35 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
   Widget build(BuildContext context) {
     final filteredEmprestimos = emprestimos.where((emprestimo) {
       final livroNome = emprestimo.tituloLivro.toLowerCase();
-      final status = emprestimo.statusEmprestimo.toString().split('.').last;
+      final status =
+          emprestimo.statusEmprestimo.toString().split('.').last.toLowerCase();
       return livroNome.contains(_searchText) &&
-          (_filterStatus == "Todos" || status == _filterStatus);
+          (_filterStatus == "Todos" || status == _filterStatus.toLowerCase());
     }).toList();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gerenciar Empréstimos'),
+        title: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Pesquisar por nome do livro',
+                  hintStyle: TextStyle(color: Colors.white70),
+                  border: InputBorder.none,
+                ),
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.search, color: Colors.white),
+              onPressed: () {
+                // Ação opcional para o botão de busca
+              },
+            ),
+          ],
+        ),
         backgroundColor: Colors.black,
         actions: [
           TextButton(
@@ -154,16 +196,6 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                labelText: 'Pesquisar por nome do livro',
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: filteredEmprestimos.length,
@@ -221,14 +253,18 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
                                   .last ==
                               'EMPRESTADO')
                             TextButton(
-                              onPressed: () {
-                                Navigator.push(
+                              onPressed: () async {
+                                final result = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DetalhesLivroScreen(
                                         emprestimo: emprestimo),
                                   ),
                                 );
+
+                                if (result == true) {
+                                  fetchEmprestimos(); // Recarrega a lista de empréstimos
+                                }
                               },
                               child: Text('Devolução'),
                             ),
