@@ -208,7 +208,7 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
                     statusColor = Colors.grey;
                     break;
                   case 'PENDENTE':
-                    statusColor = Colors.yellow;
+                    statusColor = const Color.fromARGB(255, 158, 143, 10);
                     break;
                   case 'EMPRESTADO':
                     statusColor = Colors.green;

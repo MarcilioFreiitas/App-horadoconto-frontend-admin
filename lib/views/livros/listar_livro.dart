@@ -15,6 +15,21 @@ class _ListaLivrosState extends State<ListaLivros> {
   List<Livro> livros = [];
   List<Livro> livrosFiltrados = [];
   TextEditingController searchController = TextEditingController();
+  String? generoSelecionado;
+
+  final List<String> generos = [
+    'Todos', // Adicionando a opção "Todos"
+    'FICCAO',
+    'NAO_FICCAO',
+    'ROMANCE',
+    'FANTASIA',
+    'TERROR',
+    'MISTERIO',
+    'BIOGRAFIA',
+    'HISTORIA',
+    'CIENCIA',
+    'POESIA',
+  ];
 
   @override
   void initState() {
@@ -51,9 +66,33 @@ class _ListaLivrosState extends State<ListaLivros> {
             livro.titulo.toLowerCase().contains(query.toLowerCase()) ||
             livro.autor.toLowerCase().contains(query.toLowerCase()))
         .toList();
+
+    if (generoSelecionado != null &&
+        generoSelecionado != 'Todos' &&
+        generoSelecionado!.isNotEmpty) {
+      filteredList = filteredList
+          .where((livro) =>
+              formatGenero(livro.genero.toString()) == generoSelecionado)
+          .toList();
+    }
+
     setState(() {
       livrosFiltrados = filteredList;
     });
+  }
+
+  void filterByGenero(String? genero) {
+    if (genero != null && genero != 'Todos' && genero.isNotEmpty) {
+      setState(() {
+        livrosFiltrados = livros
+            .where((livro) => formatGenero(livro.genero.toString()) == genero)
+            .toList();
+      });
+    } else {
+      setState(() {
+        livrosFiltrados = livros;
+      });
+    }
   }
 
   Future<void> deleteLivro(BuildContext context, Livro livro) async {
@@ -77,6 +116,10 @@ class _ListaLivrosState extends State<ListaLivros> {
     }
   }
 
+  String formatGenero(String genero) {
+    return genero.split('.').last; // Remove o prefixo da enumeração
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,6 +137,32 @@ class _ListaLivrosState extends State<ListaLivros> {
           },
         ),
         backgroundColor: Colors.black,
+        actions: [
+          DropdownButton<String>(
+            value: generoSelecionado,
+            hint: Text(
+              'Filtrar por gênero',
+              style: TextStyle(color: Colors.white),
+            ),
+            dropdownColor: Colors.black,
+            icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+            onChanged: (String? newValue) {
+              setState(() {
+                generoSelecionado = newValue;
+                filterByGenero(generoSelecionado);
+              });
+            },
+            items: generos.map((String genero) {
+              return DropdownMenuItem<String>(
+                value: genero,
+                child: Text(
+                  genero,
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
       body: FutureBuilder<List<Livro>>(
         future: futureLivros,
@@ -147,8 +216,7 @@ class _ListaLivrosState extends State<ListaLivros> {
                             ),
                           ),
                           Text(
-                            'Sinopse: ${utf8.decode(livrosFiltrados[index].sinopse.runes.toList())}',
-                          ),
+                              'Gênero: ${formatGenero(livrosFiltrados[index].genero.toString())}'),
                         ],
                       ),
                       trailing: Row(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/usuario.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:cpf_cnpj_validator/cpf_validator.dart'; // Importando a biblioteca de validação de CPF
 
 class AtualizarUsuario extends StatefulWidget {
   final Usuario usuario;
@@ -25,6 +26,11 @@ class _AtualizarUsuarioState extends State<AtualizarUsuario> {
     sobreNomeController = TextEditingController(text: widget.usuario.sobreNome);
     cpfController = TextEditingController(text: widget.usuario.cpf);
     emailController = TextEditingController(text: widget.usuario.email);
+  }
+
+  bool isEmailValid(String email) {
+    final regex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    return regex.hasMatch(email);
   }
 
   Future<void> atualizarUsuario(
@@ -97,6 +103,8 @@ class _AtualizarUsuarioState extends State<AtualizarUsuario> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira seu CPF';
+                  } else if (!CPFValidator.isValid(value)) {
+                    return 'CPF inválido';
                   }
                   return null;
                 },
@@ -107,6 +115,8 @@ class _AtualizarUsuarioState extends State<AtualizarUsuario> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira seu email';
+                  } else if (!isEmailValid(value)) {
+                    return 'E-mail inválido';
                   }
                   return null;
                 },

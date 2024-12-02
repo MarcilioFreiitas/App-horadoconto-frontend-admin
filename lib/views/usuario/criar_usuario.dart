@@ -67,6 +67,19 @@ class _CriarUsuarioState extends State<CriarUsuario> {
     }
   }
 
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, insira seu email';
+    }
+    // Expressão regular para validar o e-mail
+    String pattern = r'^[^@]+@[^@]+\.[^@]+';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(value)) {
+      return 'Por favor, insira um e-mail válido';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,12 +128,7 @@ class _CriarUsuarioState extends State<CriarUsuario> {
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira seu email';
-                  }
-                  return null;
-                },
+                validator: validateEmail,
               ),
               TextFormField(
                 controller: senhaController,

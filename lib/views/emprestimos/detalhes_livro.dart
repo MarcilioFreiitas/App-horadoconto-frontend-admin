@@ -63,27 +63,88 @@ class DetalhesLivroScreen extends StatelessWidget {
     }
   }
 
+  String formatStatus(String status) {
+    return status.split('.').last;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Detalhes do Livro'),
+        backgroundColor: Colors.black, // Deixando o AppBar preto
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Nome: ${emprestimo.nomeUsuario}'),
-            Text('Título: ${emprestimo.tituloLivro}'),
-            Text('Data de retirada: ${emprestimo.dataRetirada}'),
-            Text('Data de devolução: ${emprestimo.dataDevolucao}'),
-            Text('Status: ${emprestimo.statusEmprestimo}'),
-            // ... (outras informações relevantes sobre o livro)
-            ElevatedButton(
-              onPressed: () => _confirmarDevolucao(context),
-              child: Text('Confirmar Devolução'),
+            Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    offset: Offset(0, 10),
+                    blurRadius: 20,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Nome do usuário: ${emprestimo.nomeUsuario}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Título do livro: ${emprestimo.tituloLivro}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Data de retirada: ${emprestimo.dataRetirada}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Data de devolução: ${emprestimo.dataDevolucao}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Status: ${formatStatus(emprestimo.statusEmprestimo.toString())}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () => _confirmarDevolucao(context),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black, // Botão preto
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 5,
+                      shadowColor: Colors.black,
+                    ),
+                    child: Text('Confirmar Devolução'),
+                  ),
+                ],
+              ),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.grey[850], // Cor do rodapé igual às outras telas
+        child: Container(
+          height: 50.0,
+          alignment: Alignment.center,
+          child: Text(
+            'Hora do conto © 2024 IFPE - Palmares. Todos os direitos reservados.',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
     );

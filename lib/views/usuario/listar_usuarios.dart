@@ -70,11 +70,24 @@ class _ListarUsuariosState extends State<ListarUsuarios> {
       Uri.parse(
           'http://localhost:8080/usuarios/apagar/$id'), // Substitua pelo endereço da sua API
     );
+
     if (response.statusCode == 204) {
       print('Usuário deletado com sucesso');
       carregarEAtualizarUsuarios();
+    } else if (response.statusCode == 400) {
+      final responseBody = response.body;
+      if (responseBody
+          .contains('O usuário tem um empréstimo ativo ligado a ele')) {
+        print('Erro: O usuário tem um empréstimo ativo ligado a ele');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('O usuário tem um empréstimo ativo ligado a ele')),
+        );
+      } else {
+        throw Exception('Falha ao deletar usuário: ${responseBody}');
+      }
     } else {
-      throw Exception('Falha ao deletar usuário');
+      throw Exception('Falha ao deletar usuário: ${response.reasonPhrase}');
     }
   }
 

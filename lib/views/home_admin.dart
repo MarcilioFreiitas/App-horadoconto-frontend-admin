@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/emprestimos/gerenciar_emprestimo.dart';
 import 'package:flutter_application_1/views/livros/gerenciar_livros.dart';
 import 'package:flutter_application_1/views/livros/listar_livro.dart';
+import 'package:flutter_application_1/views/relatorios/relatorio_emprestimo.dart';
+import 'package:flutter_application_1/views/relatorios/relatorio_estoque.dart';
+import 'package:flutter_application_1/views/relatorios/relatorio_livro_mais_emprestado.dart';
 import 'package:flutter_application_1/views/usuario/gerenciar_usuario.dart';
 import 'package:flutter_application_1/views/usuario/listar_usuarios.dart';
+// Importando a nova tela de relatório de empréstimos
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_application_1/views/admin_login_screen.dart';
 
@@ -38,12 +42,45 @@ class HomeAdmin extends StatelessWidget {
         ],
       ),
       drawer: Drawer(
-        child: ListTile(
-          leading: Icon(Icons.exit_to_app),
-          title: Text('Relatório de empréstimos'),
-          onTap: () {
-            logout(context); // Chama a lógica de logout
-          },
+        child: ListView(
+          children: [
+            ListTile(
+              leading: Icon(Icons.insert_chart),
+              title: Text('Relatório de Empréstimos'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          RelatorioEmprestimos()), // Navegação para o novo relatório
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.inventory),
+              title: Text('Relatório de Estoque de Livros'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          RelatorioEstoqueLivros()), // Navegação para o novo relatório
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.inventory),
+              title: Text('Relatório de livros mais emprestados'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          RelatorioLivrosMaisEmprestados()), // Navegação para o novo relatório
+                );
+              },
+            ),
+          ],
         ),
       ),
       body: Container(
