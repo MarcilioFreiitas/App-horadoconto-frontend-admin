@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:flutter_application_1/model/usuario.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -21,7 +22,7 @@ class _DeletarUsuarioState extends State<DeletarUsuario> {
   Future<void> carregarUsuarios() async {
     final response = await http.get(
       Uri.parse(
-          'http://localhost:8080/usuarios/listar'), // Substitua pelo endereço da sua API
+          '${Config.baseUrl}/usuarios/listar'), // Substitua pelo endereço da sua API
     );
 
     if (response.statusCode == 200) {

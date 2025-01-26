@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:typed_data';
@@ -35,7 +36,7 @@ void createLivro(
 
     var dio = Dio();
     var response = await dio.post(
-      'http://localhost:8080/livros/salvar',
+      '${Config.baseUrl}/livros/salvar',
       data: formData,
       options: Options(
         headers: {

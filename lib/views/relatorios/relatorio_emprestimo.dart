@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:flutter_application_1/model/emprestimo.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -18,7 +19,7 @@ class _RelatorioEmprestimosState extends State<RelatorioEmprestimos> {
   }
 
   Future<List<Emprestimo>> fetchEmprestimos() async {
-    var url = Uri.parse('http://localhost:8080/emprestimo/listarEmprestimo');
+    var url = Uri.parse('${Config.baseUrl}/emprestimo/listarEmprestimo');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       Iterable lista = json.decode(response.body);

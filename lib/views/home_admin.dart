@@ -7,7 +7,6 @@ import 'package:flutter_application_1/views/relatorios/relatorio_estoque.dart';
 import 'package:flutter_application_1/views/relatorios/relatorio_livro_mais_emprestado.dart';
 import 'package:flutter_application_1/views/usuario/gerenciar_usuario.dart';
 import 'package:flutter_application_1/views/usuario/listar_usuarios.dart';
-// Importando a nova tela de relatório de empréstimos
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_application_1/views/admin_login_screen.dart';
 
@@ -85,92 +84,14 @@ class HomeAdmin extends StatelessWidget {
       ),
       body: Container(
         color: Colors.grey[200], // Cor de fundo em um tom de cinza claro
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black, // Botão na cor preta
-                    minimumSize: Size(500, 300), // Tamanho maior dos botões
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(30), // Botões arredondados
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ListaLivros()),
-                    );
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.book,
-                          color: Colors.white, size: 80), // Ícone grande
-                      Text('Gerenciar Livros',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24)), // Texto grande
-                    ],
-                  ),
-                ),
-                SizedBox(width: 40), // Espaçamento entre os botões
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    minimumSize: Size(500, 300),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GerenciarEmprestimo()),
-                    );
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.assignment, color: Colors.white, size: 80),
-                      Text('Gerenciar Empréstimos',
-                          style: TextStyle(color: Colors.white, fontSize: 24)),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 40),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    minimumSize: Size(500, 300),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ListarUsuarios()),
-                    );
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.person, color: Colors.white, size: 80),
-                      Text('Gerenciar Usuários',
-                          style: TextStyle(color: Colors.white, fontSize: 24)),
-                    ],
-                  ),
-                ),
-              ],
+        child: Center(
+          child: SingleChildScrollView(
+            child: ResponsiveWidget(
+              mobile: buildButtonColumn(context, true),
+              tablet: buildCenteredRow(context),
+              desktop: buildCenteredRow(context),
             ),
-          ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -185,5 +106,121 @@ class HomeAdmin extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget buildButtonColumn(BuildContext context, bool isMobile) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        buildButton(context,
+            icon: Icons.book,
+            label: 'Gerenciar Livros',
+            destination: ListaLivros()),
+        SizedBox(height: 20),
+        buildButton(context,
+            icon: Icons.assignment,
+            label: 'Gerenciar Empréstimos',
+            destination: GerenciarEmprestimo()),
+        SizedBox(height: 20),
+        buildButton(context,
+            icon: Icons.person,
+            label: 'Gerenciar Usuários',
+            destination: ListarUsuarios()),
+      ],
+    );
+  }
+
+  Widget buildCenteredRow(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: buildButton(context,
+                icon: Icons.book,
+                label: 'Gerenciar Livros',
+                destination: ListaLivros()),
+          ),
+        ),
+        SizedBox(width: 20),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: buildButton(context,
+                icon: Icons.assignment,
+                label: 'Gerenciar Empréstimos',
+                destination: GerenciarEmprestimo()),
+          ),
+        ),
+        SizedBox(width: 20),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: buildButton(context,
+                icon: Icons.person,
+                label: 'Gerenciar Usuários',
+                destination: ListarUsuarios()),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildButton(BuildContext context,
+      {required IconData icon,
+      required String label,
+      required Widget destination}) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.black, // Botão na cor preta
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30), // Botões arredondados
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => destination),
+        );
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: Colors.white, size: 80), // Ícone grande
+          Text(label,
+              style:
+                  TextStyle(color: Colors.white, fontSize: 24)), // Texto grande
+        ],
+      ),
+    );
+  }
+}
+
+class ResponsiveWidget extends StatelessWidget {
+  final Widget mobile;
+  final Widget tablet;
+  final Widget desktop;
+
+  ResponsiveWidget(
+      {required this.mobile, required this.tablet, required this.desktop});
+
+  static bool isMobile(BuildContext context) =>
+      MediaQuery.of(context).size.width < 600;
+  static bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 600 &&
+      MediaQuery.of(context).size.width < 1200;
+  static bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 1200;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isDesktop(context)) {
+      return desktop;
+    } else if (isTablet(context)) {
+      return tablet;
+    } else {
+      return mobile;
+    }
   }
 }

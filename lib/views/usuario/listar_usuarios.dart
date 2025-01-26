@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:flutter_application_1/model/usuario.dart';
 import 'package:flutter_application_1/views/usuario/atualizar_usuario.dart';
 import 'package:flutter_application_1/views/usuario/criar_usuario.dart';
@@ -43,7 +44,7 @@ class _ListarUsuariosState extends State<ListarUsuarios> {
 
   Future<List<Usuario>> carregarUsuarios() async {
     var url = Uri.parse(
-        'http://localhost:8080/usuarios/listar'); // Substitua pelo endereço da sua API
+        '${Config.baseUrl}/usuarios/listar'); // Substitua pelo endereço da sua API
     var response = await http.get(url);
     if (response.statusCode == 200) {
       Iterable lista = json.decode(response.body);
@@ -68,7 +69,7 @@ class _ListarUsuariosState extends State<ListarUsuarios> {
   Future<void> deletarUsuario(String id) async {
     final response = await http.delete(
       Uri.parse(
-          'http://localhost:8080/usuarios/apagar/$id'), // Substitua pelo endereço da sua API
+          '${Config.baseUrl}/usuarios/apagar/$id'), // Substitua pelo endereço da sua API
     );
 
     if (response.statusCode == 204) {

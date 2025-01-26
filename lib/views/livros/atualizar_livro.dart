@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:flutter_application_1/model/livro.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/service/file_picker_service.dart';
@@ -49,7 +50,7 @@ class _AtualizarLivroState extends State<AtualizarLivro> {
         orElse: () => Genero.FICCAO);
     _sinopseController = TextEditingController(text: widget.livro.sinopse);
     _isbnController = TextEditingController(text: widget.livro.isbn);
-    _imagemCapaUrl = 'http://localhost:8080${widget.livro.imagem_capa}';
+    _imagemCapaUrl = '${Config.baseUrl}${widget.livro.imagem_capa}';
     _disponibilidade = widget.livro.disponibilidade;
   }
 

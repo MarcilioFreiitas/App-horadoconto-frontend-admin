@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:flutter_application_1/model/livro.dart';
 import 'package:flutter_application_1/views/livros/atualizar_livro.dart';
 import 'package:flutter_application_1/views/livros/criar_livro.dart';
@@ -179,20 +180,20 @@ class _ListaLivrosState extends State<ListaLivros> {
             return ListView.builder(
               itemCount: livrosFiltrados.length,
               itemBuilder: (context, index) {
-                String urlImagem = 'http://localhost:8080' +
-                    livrosFiltrados[index].imagem_capa;
+                String urlImagem =
+                    '${Config.baseUrl}' + livrosFiltrados[index].imagem_capa;
                 return Card(
-                  margin: EdgeInsets.all(10.0),
+                  margin: EdgeInsets.all(3.0),
                   child: Container(
                     height: 150.0, // Aumentando a altura do Card
                     child: ListTile(
-                      contentPadding: EdgeInsets.all(10.0),
+                      contentPadding: EdgeInsets.all(3.0),
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.network(
                           urlImagem,
-                          width: 80,
-                          height: 120,
+                          width: 120,
+                          height: 150,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Icon(Icons.error, color: Colors.red);
@@ -229,8 +230,7 @@ class _ListaLivrosState extends State<ListaLivros> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => AtualizarLivro(
-                                    livro: livrosFiltrados[index],
-                                  ),
+                                      livro: livrosFiltrados[index]),
                                 ),
                               );
                               if (result == true) {

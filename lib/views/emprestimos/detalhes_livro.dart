@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:flutter_application_1/model/emprestimo.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,7 +41,7 @@ class DetalhesLivroScreen extends StatelessWidget {
 
   Future<void> _realizarDevolucao(BuildContext context) async {
     final url =
-        'http://localhost:8080/emprestimo/devolverEmprestimo/${emprestimo.id}'; // Substitua pela URL correta do seu backend
+        '${Config.baseUrl}/emprestimo/devolverEmprestimo/${emprestimo.id}'; // Substitua pela URL correta do seu backend
 
     final response = await http.put(Uri.parse(url));
     if (response.statusCode == 200) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cpf_cnpj_validator/cpf_validator.dart'; // Importando a biblioteca de validação de CPF
@@ -21,7 +22,7 @@ class _CriarUsuarioState extends State<CriarUsuario> {
       final response = await http
           .post(
             Uri.parse(
-                'http://localhost:8080/auth/register'), // Substitua pelo endereço da sua API
+                '${Config.baseUrl}/auth/register'), // Substitua pelo endereço da sua API
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },

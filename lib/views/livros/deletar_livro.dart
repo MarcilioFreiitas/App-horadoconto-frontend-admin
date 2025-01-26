@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:flutter_application_1/model/livro.dart';
 
 import 'package:http/http.dart' as http;
@@ -8,7 +9,7 @@ import 'dart:convert';
 
 class ListaLivrosDelete extends StatelessWidget {
   Future<List<Livro>> fetchLivros() async {
-    var url = Uri.parse('http://localhost:8080/livros/listar');
+    var url = Uri.parse('${Config.baseUrl}/livros/listar');
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -65,7 +66,7 @@ class DetalhesLivro extends StatelessWidget {
   DetalhesLivro({Key? key, required this.livro}) : super(key: key);
 
   Future<void> deleteLivro(BuildContext context) async {
-    var url = Uri.parse('http://localhost:8080/livros/apagar/${livro.id}');
+    var url = Uri.parse('${Config.baseUrl}/livros/apagar/${livro.id}');
     var response = await http.delete(url);
 
     if (response.statusCode == 200) {

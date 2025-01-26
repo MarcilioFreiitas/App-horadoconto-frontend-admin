@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:flutter_application_1/model/usuario.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -37,8 +38,7 @@ class _AtualizarUsuarioState extends State<AtualizarUsuario> {
       BuildContext context, Usuario usuarioAtualizado) async {
     if (_formKey.currentState!.validate()) {
       final response = await http.patch(
-        Uri.parse(
-            'http://localhost:8080/usuarios/alterar/${usuarioAtualizado.id}'),
+        Uri.parse('${Config.baseUrl}/usuarios/alterar/${usuarioAtualizado.id}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

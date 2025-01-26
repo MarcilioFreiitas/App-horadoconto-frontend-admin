@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/config.dart';
 import 'package:flutter_application_1/model/emprestimo.dart';
 import 'package:flutter_application_1/views/emprestimos/detalhes_emprestimo.dart';
 import 'package:flutter_application_1/views/emprestimos/detalhes_livro.dart';
@@ -30,7 +31,7 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
   Future<void> fetchEmprestimos() async {
     try {
       final response = await http
-          .get(Uri.parse('http://localhost:8080/emprestimo/listarEmprestimo'));
+          .get(Uri.parse('${Config.baseUrl}/emprestimo/listarEmprestimo'));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         if (data != null && data.isNotEmpty) {
@@ -70,7 +71,7 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
 
     try {
       final response = await http.put(
-        Uri.parse('http://localhost:8080/emprestimo/aprovar/$id'),
+        Uri.parse('${Config.baseUrl}/emprestimo/aprovar/$id'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -94,7 +95,7 @@ class _GerenciarEmprestimoState extends State<GerenciarEmprestimo> {
   Future<void> rejeitarEmprestimo(String id) async {
     try {
       final response = await http.put(
-        Uri.parse('http://localhost:8080/emprestimo/rejeitar/$id'),
+        Uri.parse('${Config.baseUrl}/emprestimo/rejeitar/$id'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
