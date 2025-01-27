@@ -49,7 +49,7 @@ class _ListaLivrosState extends State<ListaLivros> {
   }
 
   Future<List<Livro>> fetchLivros() async {
-    var url = Uri.parse('http://localhost:8080/livros/listar');
+    var url = Uri.parse('${Config.baseUrl}/livros/listar');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       Iterable lista = json.decode(response.body);
@@ -97,7 +97,7 @@ class _ListaLivrosState extends State<ListaLivros> {
   }
 
   Future<void> deleteLivro(BuildContext context, Livro livro) async {
-    var url = Uri.parse('http://localhost:8080/livros/apagar/${livro.id}');
+    var url = Uri.parse('${Config.baseUrl}/livros/apagar/${livro.id}');
     var response = await http.delete(url);
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
