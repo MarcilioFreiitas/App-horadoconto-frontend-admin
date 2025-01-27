@@ -175,7 +175,7 @@ class HomeAdmin extends StatelessWidget {
       required Widget destination}) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Colors.black, // Botão na cor preta
+        backgroundColor: Colors.black, // Botão na cor preta
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30), // Botões arredondados
         ),

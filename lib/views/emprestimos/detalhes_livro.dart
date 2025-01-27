@@ -122,7 +122,7 @@ class DetalhesLivroScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () => _confirmarDevolucao(context),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.black, // Botão preto
+                      backgroundColor: Colors.black, // Botão preto
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

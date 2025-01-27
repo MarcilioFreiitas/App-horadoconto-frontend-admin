@@ -180,7 +180,7 @@ class _AtualizarLivroState extends State<AtualizarLivro> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.black,
+                        backgroundColor: Colors.black,
                         minimumSize: Size(double.infinity, 50), // Botão maior
                       ),
                       child: Text('Selecionar nova imagem da capa'),
@@ -191,7 +191,7 @@ class _AtualizarLivroState extends State<AtualizarLivro> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.black,
+                        backgroundColor: Colors.black,
                         minimumSize: Size(double.infinity, 50), // Botão maior
                       ),
                       child: Text('Atualizar livro'),

@@ -150,7 +150,7 @@ class _CriarUsuarioState extends State<CriarUsuario> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.black, // Cor do botão
+                  backgroundColor: Colors.black, // Cor do botão
                 ),
                 child: Text('Cadastrar'),
               ),

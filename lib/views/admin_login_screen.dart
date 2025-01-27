@@ -96,8 +96,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 },
                 child: Text('Login'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.black, // Cor do botão
-                  onPrimary: Colors.white, // Cor do texto do botão
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.black, // Cor do texto do botão
                 ),
               ),
               if (errorMessage != null)

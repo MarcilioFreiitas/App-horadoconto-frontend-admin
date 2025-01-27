@@ -141,7 +141,7 @@ class _CriarLivroState extends State<CriarLivro> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.black,
+                        backgroundColor: Colors.black,
                         minimumSize: Size(double.infinity, 50), // Botão maior
                       ),
                       child: Text('Selecionar imagem da capa'),
@@ -152,7 +152,7 @@ class _CriarLivroState extends State<CriarLivro> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.black,
+                        backgroundColor: Colors.black,
                         minimumSize: Size(double.infinity, 50), // Botão maior
                       ),
                       child: Text('Cadastrar livro'),
