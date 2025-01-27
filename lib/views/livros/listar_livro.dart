@@ -17,9 +17,10 @@ class _ListaLivrosState extends State<ListaLivros> {
   List<Livro> livrosFiltrados = [];
   TextEditingController searchController = TextEditingController();
   String? generoSelecionado;
+  ScaffoldMessengerState? scaffoldMessenger;
 
   final List<String> generos = [
-    'Todos', // Adicionando a opção "Todos"
+    'Todos',
     'FICCAO',
     'NAO_FICCAO',
     'ROMANCE',
@@ -31,6 +32,12 @@ class _ListaLivrosState extends State<ListaLivros> {
     'CIENCIA',
     'POESIA',
   ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    scaffoldMessenger = ScaffoldMessenger.of(context);
+  }
 
   @override
   void initState() {
@@ -100,25 +107,31 @@ class _ListaLivrosState extends State<ListaLivros> {
     var url = Uri.parse('${Config.baseUrl}/livros/apagar/${livro.id}');
     var response = await http.delete(url);
     if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Livro apagado com sucesso.'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      carregarLivros(); // Atualize a lista de livros após a exclusão
+      if (mounted) {
+        scaffoldMessenger?.showSnackBar(
+          SnackBar(
+            content: Text('Livro apagado com sucesso.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+      setState(() {
+        carregarLivros();
+      });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Falha ao apagar o livro.'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      if (mounted) {
+        scaffoldMessenger?.showSnackBar(
+          SnackBar(
+            content: Text('Falha ao apagar o livro.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
 
   String formatGenero(String genero) {
-    return genero.split('.').last; // Remove o prefixo da enumeração
+    return genero.split('.').last;
   }
 
   @override
@@ -185,7 +198,7 @@ class _ListaLivrosState extends State<ListaLivros> {
                 return Card(
                   margin: EdgeInsets.all(3.0),
                   child: Container(
-                    height: 150.0, // Aumentando a altura do Card
+                    height: 150.0,
                     child: ListTile(
                       contentPadding: EdgeInsets.all(3.0),
                       leading: ClipRRect(
@@ -268,7 +281,7 @@ class _ListaLivrosState extends State<ListaLivros> {
                                 },
                               );
                             },
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -286,7 +299,7 @@ class _ListaLivrosState extends State<ListaLivros> {
             MaterialPageRoute(builder: (context) => CriarLivro()),
           );
           if (result == true) {
-            carregarLivros();
+            carregarLivros(); // Recarrega a lista de livros após adicionar um novo livro
           }
         },
         backgroundColor: Colors.black,

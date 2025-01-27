@@ -1,7 +1,7 @@
+// ignore_for_file: avoid_web_libraries_in_flutter, depend_on_referenced_packages, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/config.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'dart:html' as html;

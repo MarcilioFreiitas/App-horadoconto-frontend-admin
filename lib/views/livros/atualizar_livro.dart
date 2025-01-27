@@ -232,8 +232,7 @@ class _AtualizarLivroState extends State<AtualizarLivro> {
   }
 
   Future<void> atualizarLivro() async {
-    var url =
-        Uri.parse('http://localhost:8080/livros/alterar/${widget.livro.id}');
+    var url = Uri.parse('${Config.baseUrl}/livros/alterar/${widget.livro.id}');
 
     var request = http.MultipartRequest('PUT', url)
       ..fields['titulo'] = _tituloController.text

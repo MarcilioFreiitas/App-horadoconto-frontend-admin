@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/emprestimos/gerenciar_emprestimo.dart';
 import 'package:flutter_application_1/views/livros/gerenciar_livros.dart';
@@ -33,7 +35,7 @@ class HomeAdmin extends StatelessWidget {
             height: 35), // Logo no lugar do texto
         actions: [
           IconButton(
-            icon: Icon(Icons.exit_to_app),
+            icon: const Icon(Icons.exit_to_app),
             onPressed: () {
               logout(context); // Chama a lógica de logout
             },
@@ -44,8 +46,8 @@ class HomeAdmin extends StatelessWidget {
         child: ListView(
           children: [
             ListTile(
-              leading: Icon(Icons.insert_chart),
-              title: Text('Relatório de Empréstimos'),
+              leading: const Icon(Icons.insert_chart),
+              title: const Text('Relatório de Empréstimos'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -56,8 +58,8 @@ class HomeAdmin extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.inventory),
-              title: Text('Relatório de Estoque de Livros'),
+              leading: const Icon(Icons.inventory),
+              title: const Text('Relatório de Estoque de Livros'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -68,8 +70,8 @@ class HomeAdmin extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.inventory),
-              title: Text('Relatório de livros mais emprestados'),
+              leading: const Icon(Icons.inventory),
+              title: const Text('Relatório de livros mais emprestados'),
               onTap: () {
                 Navigator.push(
                   context,
