@@ -1,4 +1,3 @@
-// file_picker_service.dart
 import 'dart:html' as html;
 import 'dart:async';
 

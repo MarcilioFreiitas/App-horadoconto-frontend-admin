@@ -40,13 +40,17 @@ class _CriarLivroState extends State<CriarLivro> {
   }
 
   Future<void> pickImage() async {
-    final selectedImage = await pickFile(); // Use a função do serviço
-    setState(() {
+    try {
+      final selectedImage = await pickFile(); // Use a função do serviço
       if (selectedImage != null) {
-        _imagemCapa = selectedImage; // Armazene o arquivo selecionado
-        _imagemCapaUrl = html.Url.createObjectUrl(_imagemCapa);
+        setState(() {
+          _imagemCapa = selectedImage; // Armazene o arquivo selecionado
+          _imagemCapaUrl = html.Url.createObjectUrl(_imagemCapa!);
+        });
       }
-    });
+    } catch (e) {
+      print('Erro ao selecionar arquivo: $e');
+    }
   }
 
   @override
