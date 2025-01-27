@@ -139,7 +139,7 @@ class _AtualizarUsuarioState extends State<AtualizarUsuario> {
                 },
                 child: Text('Atualizar'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.black, // Cor do botão
+                  backgroundColor: Colors.black, // Cor do botão
                 ),
               ),
             ],

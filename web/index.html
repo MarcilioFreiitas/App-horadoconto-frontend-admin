@@ -12,18 +12,19 @@
     <title>Hora do conto</title>
     <link rel="manifest" href="manifest.json" />
     <script>
-      var serviceWorkerVersion = null;
+      var serviceWorkerVersion = "{{flutter_service_worker_version}}"; <!-- Atualização -->
     </script>
     <script src="flutter.js" defer></script>
   </head>
   <body>
     <script>
       window.addEventListener("load", function (ev) {
-        _flutter.loader.loadEntrypoint({
+        _flutter.loader.load({
           serviceWorker: {
             serviceWorkerVersion: serviceWorkerVersion,
           },
           onEntrypointLoaded: function (engineInitializer) {
+            <!-- Atualização -->
             engineInitializer.initializeEngine().then(function (appRunner) {
               appRunner.runApp();
             });
